@@ -1,0 +1,137 @@
+test> use Base_datos
+switched to db Base_datos
+Base_datos> show collections
+
+Base_datos> db.createCollection ("personas",{})
+{ ok: 1 }
+Base_datos> db.personas.insertmany ([{nombre:"Juan", edad: 30, ciudad: "Nueva York"}, {nombre:"Maria", edad: 35, ciudad:"Los Angeles"}, {nombre:"Carlos", edad: 28, ciudad: "Nueva York"}])
+TypeError: db.personas.insertmany is not a function
+Base_datos> db.personas.insertMany ([{nombre:"Juan", edad: 30, ciudad: "Nueva York"}, {nombre:"Maria", edad: 35, ciudad:"Los Angeles"}, {nombre:"Carlos", edad: 28, ciudad: "Nueva York"}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("6528c305ef79a77b0dabc42f"),
+    '1': ObjectId("6528c305ef79a77b0dabc430"),
+    '2': ObjectId("6528c305ef79a77b0dabc431")
+  }
+}
+Base_datos> db.personas.find({})
+[
+  {
+    _id: ObjectId("6528c305ef79a77b0dabc42f"),
+    nombre: 'Juan',
+    edad: 30,
+    ciudad: 'Nueva York'
+  },
+  {
+    _id: ObjectId("6528c305ef79a77b0dabc430"),
+    nombre: 'Maria',
+    edad: 35,
+    ciudad: 'Los Angeles'
+  },
+  {
+    _id: ObjectId("6528c305ef79a77b0dabc431"),
+    nombre: 'Carlos',
+    edad: 28,
+    ciudad: 'Nueva York'
+  }
+]
+Base_datos> db.persona.find({edad:{$gt:25}})
+
+Base_datos> db.personas.find({edad:{$gt:25}})
+[
+  {
+    _id: ObjectId("6528c305ef79a77b0dabc42f"),
+    nombre: 'Juan',
+    edad: 30,
+    ciudad: 'Nueva York'
+  },
+  {
+    _id: ObjectId("6528c305ef79a77b0dabc430"),
+    nombre: 'Maria',
+    edad: 35,
+    ciudad: 'Los Angeles'
+  },
+  {
+    _id: ObjectId("6528c305ef79a77b0dabc431"),
+    nombre: 'Carlos',
+    edad: 28,
+    ciudad: 'Nueva York'
+  }
+]
+Base_datos> db.personas.find({edad:{$gt:30}})
+[
+  {
+    _id: ObjectId("6528c305ef79a77b0dabc430"),
+    nombre: 'Maria',
+    edad: 35,
+    ciudad: 'Los Angeles'
+  }
+]
+Base_datos> db.personas.updateOne({edad:{$eq: 30, $set:31})
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:46)
+
+> 1 | db.personas.updateOne({edad:{$eq: 30, $set:31})
+    |                                               ^
+  2 |
+
+Base_datos> db.personas.updateOne({edad:{$eq: 30}}, {$set:{edad: 31}})
+{ongoInvalidArgumentError: Update document requires atomic operators
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+Base_datos> db.personas.find()
+[
+  {
+    _id: ObjectId("6528c305ef79a77b0dabc42f"),
+    nombre: 'Juan',
+    edad: 31,
+    ciudad: 'Nueva York'
+  },
+  {
+    _id: ObjectId("6528c305ef79a77b0dabc430"),
+    nombre: 'Maria',
+    edad: 35,
+    ciudad: 'Los Angeles'
+  },
+  {
+    _id: ObjectId("6528c305ef79a77b0dabc431"),
+    nombre: 'Carlos',
+    edad: 28,
+    ciudad: 'Nueva York'
+  }
+]
+Base_datos> db.personas.updateMany({edad:{$gt:25, $eq:31}, ciudad:{$eq:"Nueva York"}}, {$set:{ciudad: "Los Angeles"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+Base_datos> db.personas.find()
+[
+  {
+    _id: ObjectId("6528c305ef79a77b0dabc42f"),
+    nombre: 'Juan',
+    edad: 31,
+    ciudad: 'Los Angeles'
+  },
+  {
+    _id: ObjectId("6528c305ef79a77b0dabc430"),
+    nombre: 'Maria',
+    edad: 35,
+    ciudad: 'Los Angeles'
+  },
+  {
+    _id: ObjectId("6528c305ef79a77b0dabc431"),
+    nombre: 'Carlos',
+    edad: 28,
+    ciudad: 'Nueva York'
+  }
+]
+Base_datos>
